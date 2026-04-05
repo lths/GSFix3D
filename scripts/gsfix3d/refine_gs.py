@@ -149,7 +149,8 @@ def main(args, model_params, optim_params, pipeline_params):
             T_kf_inv = np.linalg.inv(T_kf)
             gs_cam_kf = Camera(R=T_kf_inv[:3, :3], T=T_kf_inv[:3, 3], FoVx=fov_x, FoVy=fov_y, width=intrinsics["width"], height=intrinsics["height"])
             
-            kf_img = Image.open(train_rgb_file_paths[kf_idx])
+            kf_img = Image.open(train_rgb_file_paths[kf_idx]).convert("RGB")
+            kf_img = kf_img.resize((intrinsics["width"], intrinsics["height"]), Image.BILINEAR)
             gt_image = to_tensor(kf_img)
             gt_image = gt_image.cuda()
 
